@@ -25,3 +25,7 @@ plot(total_emissions$year, total_emissions$sum,
 
 dev.copy(png, file="figure/plot1.png");
 dev.off()
+
+### Alternative
+plot1=tapply(X=NEI$Emissions,FUN = sum,INDEX=NEI$year)
+plot(names(plot1),plot1,xlab="year",ylab="Total PM2.5 emissions (tons)",type="l",main="PM2.5 Data United States")

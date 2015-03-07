@@ -29,3 +29,18 @@ polygon(coal_emissions, col = "grey", border = "black")
 ## put plot into png
 dev.copy(png, file="figure/plot4.png");
 dev.off()
+
+# Alternative
+# Exploration
+# Find all coal combustion related rows.
+### intersect( grep("Coal", SCC$SCC.Level.Four,ignore.case=TRUE), grep("Combustion", SCC$SCC.Level.Four,ignore.case=TRUE) )
+# Did we miss anything on other levels?
+### intersect ( grep("Coal", SCC$Short.Name,ignore.case=TRUE), grep("Combustion", SCC$Short.Name,ignore.case=TRUE) )
+
+# Get all coal combustion rows
+coal_combust_logical=intersect( grep("Coal", SCC$EI.Sector,ignore.case=TRUE), grep("Comb", SCC$EI.Sector,ignore.case=TRUE) )
+Coal_SCC=SCC$SCC[ coal_combust_logical ]
+
+sub_NEI_Coal=NEI[ NEI$SCC %in% Coal_SCC, ]
+plot4=tapply(X=sub_NEI_Coal$Emissions,FUN = sum,INDEX=sub_NEI_Coal$year)
+plot(names(plot4),plot4,xlab="year",ylab="Total PM2.5 emissions (tons)",type="l",main="PM2.5 from Coal Combustion in United States")

@@ -28,3 +28,13 @@ polygon(coal_emissions, col = "grey", border = "black")
 ## put plot into png
 dev.copy(png, file="figure/plot5.png");
 dev.off()
+
+
+# Alternative
+# Find conditions for motor vehicle rows by exploring factors in SCC
+motor_vehicle_logical= intersect( grep("Mobile Sources", SCC$SCC.Level.One,ignore.case=TRUE), grep("Vehicle", SCC$SCC.Level.Two,ignore.case=TRUE))
+Motor_SCC=SCC$SCC[ motor_vehicle_logical ]
+sub_NEI=NEI[  NEI$fips=="24510" & NEI$SCC %in% Motor_SCC, ]
+
+plot5=tapply(X=sub_NEI$Emissions,FUN = sum,INDEX=sub_NEI$year)
+plot(names(plot5),plot5,xlab="year",ylab="Total PM2.5 emissions (tons)",type="l",main="PM2.5 from Motor Vehicles in Baltimore")

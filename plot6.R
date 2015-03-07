@@ -35,3 +35,22 @@ qplot(year,  em_sum, data=result, geom="line", color=county, xlab="Year",
 ## put plot into png
 dev.copy(png, file="figure/plot6.png");
 dev.off()
+
+
+# Alternative #1
+# Preload
+motor_vehicle_logical= grep("Vehicle", SCC$SCC.Level.Two,ignore.case=TRUE)
+Motor_SCC=SCC$SCC[ motor_vehicle_logical ]
+Baltimore_NEI=NEI[  NEI$fips=="24510" & NEI$SCC %in% Motor_SCC, ]
+LA_NEI=NEI[  NEI$fips=="06037" & NEI$SCC %in% Motor_SCC, ]
+
+plot6=tapply(X=Baltimore_NEI$Emissions,FUN = sum,INDEX=Baltimore_NEI$year)
+plot6b=tapply(X=LA_NEI$Emissions,FUN = sum,INDEX=LA_NEI$year)
+diff1=plot6-plot6[1]
+diff2=plot6b-plot6b[1]
+
+plot(names(diff1),diff1,ylim=range(-300:1500),col="red",xlab="year",ylab="Change in Total PM2.5 emissions (tons)",type="l",main="Difference in Motor Vehicles PM2.5 emissions from 1999")
+points(names(diff2),diff2,type='l',col="blue")
+legend("topright", lwd=1, col=c("red","blue"), legend=c("Baltimore","Los Angeles"))
+abline(0,0)
+

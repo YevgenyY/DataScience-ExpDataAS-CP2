@@ -24,3 +24,8 @@ plot(te$year, te$sum,
 
 dev.copy(png, file="figure/plot2.png");
 dev.off()
+
+# Alternative
+sub_NEI=NEI[ NEI$fips=="24510", ]
+plot2=tapply(X=sub_NEI$Emissions,FUN = sum,INDEX=sub_NEI$year)
+plot(names(plot2),plot2,xlab="year",ylab="Total PM2.5 emissions (tons)",type="l",main="PM2.5 Baltimore state, Maryland")
